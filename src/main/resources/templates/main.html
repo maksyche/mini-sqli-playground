@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Play with SQLI on a local H2 database</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/md5.js"></script>
+</head>
+<body>
+<div align="center">
+    <h1>Play with SQLI on a local H2 database</h1>
+
+    <hr>
+    <form action="#" th:action="@{/login}" th:object="${loginRequest}" method="post">
+        <p>Login:</p>
+        <p>Username: <input type="text" id="login-username" placeholder="maksyche" size="50" th:field="*{username}" /></p>
+        <p>Password: <input type="text" id="login-password" placeholder="default" size="50" th:field="*{password}" /></p>
+
+        <p id="login-p" style="display: none"></p>
+        <p><input id="login-p-hide" type="button" value="Show/Hide Query"/></p>
+        <script>
+            var hintTextLogin = "SELECT * FROM users WHERE username='{1}' and pass_hash='{2}';";
+            var buttonHideLogin = document.getElementById('login-p-hide');
+            var sqlHintLogin = document.getElementById('login-p');
+            sqlHintLogin.innerText = hintTextLogin.replace("{1}", "").replace("{2}", "d41d8cd98f00b204e9800998ecf8427e");
+            buttonHideLogin.onclick = function() {
+                if (sqlHintLogin.style.display==="none") {
+                    sqlHintLogin.style.display="block";
+                } else {
+                    sqlHintLogin.style.display="none";
+                }
+            };
+            var inputField1Login = document.getElementById('login-username');
+            var inputField2Login = document.getElementById('login-password');
+            var onInputChange = function() {
+                sqlHintLogin.innerText = hintTextLogin.replace("{1}", inputField1Login.value)
+                    .replace("{2}", CryptoJS.MD5(inputField2Login.value).toString());
+            };
+
+            inputField1Login.oninput = onInputChange;
+            inputField2Login.oninput = onInputChange;
+        </script>
+
+        <p><input type="submit" value="Submit" /> </p>
+    </form>
+
+    <hr>
+    <form id="get" method="POST" action="get">
+        <p>Show user's data:</p>
+        <p>Username: <input type="text" id="get-username" name="get-username" placeholder="maksyche" size="50"/></p>
+
+        <p id="get-p" style="display: none"></p>
+        <p><input id="get-p-hide" type="button" value="Show/Hide Query"/></p>
+        <script>
+            var hintTextGet = "SELECT * FROM users WHERE username='{1}';";
+            var buttonHideGet = document.getElementById('get-p-hide');
+            var sqlHintGet = document.getElementById('get-p');
+            sqlHintGet.innerText = hintTextGet.replace("{1}", "");
+            buttonHideGet.onclick = function() {
+                if (sqlHintGet.style.display==="none") {
+                    sqlHintGet.style.display="block";
+                } else {
+                    sqlHintGet.style.display="none";
+                }
+            };
+            var inputFieldGet = document.getElementById('get-username');
+            inputFieldGet.oninput = function() {
+                sqlHintGet.innerText = hintTextGet.replace("{1}", inputFieldGet.value);
+            };
+        </script>
+
+        <p><input type="submit" value="Send"/></p>
+    </form>
+
+    <hr>
+    <form id="register" method="POST" action="register">
+        <p>Register a username with the 'default' password:</p>
+        <p>Username: <input type="text" id="register-username" name="register-username" placeholder="your_username" size="50"/></p>
+
+        <p id="register-p" style="display: none"></p>
+        <p><input id="register-p-hide" type="button" value="Show/Hide Query"/></p>
+        <script>
+            var hintTextRegister = "INSERT INTO users (id, username, info, pass_hash) VALUES (4, '{1}', 'Some data here', 'c21f969b5f03d33d43e04f8f136e7682');";
+            var buttonHideRegister = document.getElementById('register-p-hide');
+            var sqlHintRegister = document.getElementById('register-p');
+            sqlHintRegister.innerText = hintTextRegister.replace("{1}", "");
+            buttonHideRegister.onclick = function() {
+                if (sqlHintRegister.style.display==="none") {
+                    sqlHintRegister.style.display="block";
+                } else {
+                    sqlHintRegister.style.display="none";
+                }
+            };
+            var inputFieldRegister = document.getElementById('register-username');
+            inputFieldRegister.oninput = function() {
+                sqlHintRegister.innerText = hintTextRegister.replace("{1}", inputFieldRegister.value);
+            };
+        </script>
+
+        <p><input type="submit" value="Send"/></p>
+    </form>
+
+    <hr>
+    <form action="#" th:action="@{/update}" th:object="${updateRequest}" method="post">
+        <p>Update user info by username and password:</p>
+        <p>Username: <input type="text" id="update-username" placeholder="maksyche" size="50" th:field="*{username}" /></p>
+        <p>Password: <input type="text" id="update-password" placeholder="default" size="50" th:field="*{password}" /></p>
+        <p>Info: <input type="text" id="update-info" placeholder="Some info" size="50" th:field="*{info}" /></p>
+
+        <p id="update-p" style="display: none"></p>
+        <p><input id="update-p-hide" type="button" value="Show/Hide Query"/></p>
+        <script>
+            var hintTextUpdate = "UPDATE users SET info = '{3}' WHERE username = '{1}' and pass_hash = '{2}';";
+            var buttonHideUpdate = document.getElementById('update-p-hide');
+            var sqlHintUpdate = document.getElementById('update-p');
+            sqlHintUpdate.innerText = hintTextUpdate.replace("{1}", "").replace("{2}", "d41d8cd98f00b204e9800998ecf8427e").replace("{3}", "");
+            buttonHideUpdate.onclick = function() {
+                if (sqlHintUpdate.style.display==="none") {
+                    sqlHintUpdate.style.display="block";
+                } else {
+                    sqlHintUpdate.style.display="none";
+                }
+            };
+            var inputField1Update = document.getElementById('update-username');
+            var inputField2Update = document.getElementById('update-password');
+            var inputField3Update = document.getElementById('update-info');
+            var onInputChange = function() {
+                sqlHintUpdate.innerText = hintTextUpdate.replace("{1}", inputField1Update.value).replace("{2}", CryptoJS.MD5(inputField2Update.value).toString()).replace("{3}", inputField3Update.value);
+            };
+
+            inputField1Update.oninput = onInputChange;
+            inputField2Update.oninput = onInputChange;
+            inputField3Update.oninput = onInputChange;
+        </script>
+
+        <p><input type="submit" value="Submit" /> </p>
+    </form>
+
+</div>
+</body>
+</html>

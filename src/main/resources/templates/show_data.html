@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Play with SQLI on a local H2 database</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div align="center">
+    <h1>User data</h1>
+    <hr>
+    <div th:object="${userResponse}">
+        <h3>ID: <ins th:text="*{id}"/></h3>
+        <h3>Username: <ins th:text="*{username}"/></h3>
+        <h3>Info: <ins th:text="*{info}"/></h3>
+    </div>
+</div>
+</body>
+</html>
