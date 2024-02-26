@@ -80,7 +80,7 @@
         <p id="register-p" style="display: none"></p>
         <p><input id="register-p-hide" type="button" value="Show/Hide Query"/></p>
         <script>
-            var hintTextRegister = "INSERT INTO users (id, username, info, pass_hash) VALUES (4, '{1}', 'Some data here', 'c21f969b5f03d33d43e04f8f136e7682');";
+            var hintTextRegister = "INSERT INTO users (id, username, pass_hash, is_admin, info) VALUES (4, '{1}', 'c21f969b5f03d33d43e04f8f136e7682', false, 'This is a new user');";
             var buttonHideRegister = document.getElementById('register-p-hide');
             var sqlHintRegister = document.getElementById('register-p');
             sqlHintRegister.innerText = hintTextRegister.replace("{1}", "");

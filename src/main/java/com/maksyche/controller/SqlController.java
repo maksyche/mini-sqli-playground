@@ -47,6 +47,7 @@ public class SqlController {
                 new UserResponse(
                         rs.getInt("id"),
                         rs.getString("username"),
+                        rs.getBoolean("is_admin"),
                         rs.getString("info"))
         ).stream().findFirst();
         if (user.isEmpty()) {
@@ -59,8 +60,8 @@ public class SqlController {
 
     @PostMapping(value = "/register")
     public String register(@RequestParam("register-username") String username, Model model) {
-        jdbcTemplate.execute(("INSERT INTO users (id, username, info, pass_hash) " +
-                              "VALUES (%d, '%s', 'Some data here', 'c21f969b5f03d33d43e04f8f136e7682');")
+        jdbcTemplate.execute(("INSERT INTO users (id, username, pass_hash, is_admin, info) " +
+                              "VALUES (%d, '%s', 'c21f969b5f03d33d43e04f8f136e7682', false, 'This is a new user');")
                 .formatted(currentId.incrementAndGet(), username));
         model.addAttribute("response", new GeneralResponse("Executed!"));
         return "response";
@@ -73,6 +74,7 @@ public class SqlController {
                 new UserResponse(
                         rs.getInt("id"),
                         rs.getString("username"),
+                        rs.getBoolean("is_admin"),
                         rs.getString("info"))
         ).stream().findFirst();
         if (user.isEmpty()) {

@@ -6,14 +6,17 @@ public class UserResponse {
 
     private String username;
 
+    private boolean isAdmin;
+
     private String info;
 
     public UserResponse() {
     }
 
-    public UserResponse(long id, String username, String info) {
+    public UserResponse(long id, String username, boolean isAdmin, String info) {
         this.id = id;
         this.username = username;
+        this.isAdmin = isAdmin;
         this.info = info;
     }
 
@@ -31,6 +34,14 @@ public class UserResponse {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 
     public String getInfo() {
